@@ -79,17 +79,17 @@
 
 
 
-<meta name="description" content="ubuntu新建用户的心得记录解决ubuntu新添加用户不能sudo使用用户创建命令：1sudo adduser newusername 接下来你只需要按照提示就可以成功创建一个用户了，但是再创建用户之后会发现一个问题当你使用sudo命令时候会弹出以下语句：1xxx is not in the sudoers file.  This incident will be reported 问题如系统提">
+<meta name="description" content="解决ubuntu新添加用户不能sudo使用用户创建命令：1sudo adduser newusername 接下来你只需要按照提示就可以成功创建一个用户了，但是再创建用户之后会发现一个问题当你使用sudo命令时候会弹出以下语句：1xxx is not in the sudoers file.  This incident will be reported 问题如系统提示的那样，因为用户名不在sud">
 <meta property="og:type" content="article">
-<meta property="og:title" content="sudo">
+<meta property="og:title" content="ubuntu添加用户时的使用心得">
 <meta property="og:url" content="http://yoursite.com/2019/07/20/sudo/index.html">
 <meta property="og:site_name" content="Yu&#39;s blog">
-<meta property="og:description" content="ubuntu新建用户的心得记录解决ubuntu新添加用户不能sudo使用用户创建命令：1sudo adduser newusername 接下来你只需要按照提示就可以成功创建一个用户了，但是再创建用户之后会发现一个问题当你使用sudo命令时候会弹出以下语句：1xxx is not in the sudoers file.  This incident will be reported 问题如系统提">
+<meta property="og:description" content="解决ubuntu新添加用户不能sudo使用用户创建命令：1sudo adduser newusername 接下来你只需要按照提示就可以成功创建一个用户了，但是再创建用户之后会发现一个问题当你使用sudo命令时候会弹出以下语句：1xxx is not in the sudoers file.  This incident will be reported 问题如系统提示的那样，因为用户名不在sud">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-07-20T14:47:56.688Z">
+<meta property="og:updated_time" content="2019-07-20T15:09:39.460Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="sudo">
-<meta name="twitter:description" content="ubuntu新建用户的心得记录解决ubuntu新添加用户不能sudo使用用户创建命令：1sudo adduser newusername 接下来你只需要按照提示就可以成功创建一个用户了，但是再创建用户之后会发现一个问题当你使用sudo命令时候会弹出以下语句：1xxx is not in the sudoers file.  This incident will be reported 问题如系统提">
+<meta name="twitter:title" content="ubuntu添加用户时的使用心得">
+<meta name="twitter:description" content="解决ubuntu新添加用户不能sudo使用用户创建命令：1sudo adduser newusername 接下来你只需要按照提示就可以成功创建一个用户了，但是再创建用户之后会发现一个问题当你使用sudo命令时候会弹出以下语句：1xxx is not in the sudoers file.  This incident will be reported 问题如系统提示的那样，因为用户名不在sud">
 
 
 
@@ -125,7 +125,7 @@
 
 
 
-  <title>sudo | Yu's blog</title>
+  <title>ubuntu添加用户时的使用心得 | Yu's blog</title>
   
 
 
@@ -249,7 +249,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">sudo</h1>
+          <h1 class="post-title" itemprop="name headline">ubuntu添加用户时的使用心得</h1>
         
 
         <div class="post-meta">
@@ -299,7 +299,7 @@
       
 
       
-        <h1 id="ubuntu新建用户的心得记录"><a href="#ubuntu新建用户的心得记录" class="headerlink" title="ubuntu新建用户的心得记录"></a>ubuntu新建用户的心得记录</h1><h2 id="解决ubuntu新添加用户不能sudo"><a href="#解决ubuntu新添加用户不能sudo" class="headerlink" title="解决ubuntu新添加用户不能sudo"></a>解决ubuntu新添加用户不能sudo</h2><p>使用用户创建命令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo adduser newusername</span><br></pre></td></tr></table></figure></p>
+        <h2 id="解决ubuntu新添加用户不能sudo"><a href="#解决ubuntu新添加用户不能sudo" class="headerlink" title="解决ubuntu新添加用户不能sudo"></a>解决ubuntu新添加用户不能sudo</h2><p>使用用户创建命令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo adduser newusername</span><br></pre></td></tr></table></figure></p>
 <p>接下来你只需要按照提示就可以成功创建一个用户了，但是再创建用户之后会发现一个问题当你使用sudo命令时候会弹出以下语句：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xxx is not in the sudoers file.  This incident will be reported</span><br></pre></td></tr></table></figure></p>
 <p>问题如系统提示的那样，因为用户名不在sudoer文件中，所以该命令无法执行，这种情况对于一个用户来说权限太小，解决办法如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">su -（进入超级用户模式，即获得管理员权限）</span><br></pre></td></tr></table></figure></p>
 <p>或许有同学使用该命令之后会弹出以下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Authentication failure</span><br></pre></td></tr></table></figure></p>
@@ -468,7 +468,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#ubuntu新建用户的心得记录"><span class="nav-number">1.</span> <span class="nav-text">ubuntu新建用户的心得记录</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#解决ubuntu新添加用户不能sudo"><span class="nav-number">1.1.</span> <span class="nav-text">解决ubuntu新添加用户不能sudo</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#机理分析"><span class="nav-number">1.2.</span> <span class="nav-text">机理分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#关于新添加用户环境的心得"><span class="nav-number">1.3.</span> <span class="nav-text">关于新添加用户环境的心得</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#关于conda的使用链接："><span class="nav-number">1.3.0.1.</span> <span class="nav-text">关于conda的使用链接：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#vim的使用详解"><span class="nav-number">1.3.0.2.</span> <span class="nav-text">vim的使用详解</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#conda-command-not-found解决办法"><span class="nav-number">1.3.0.3.</span> <span class="nav-text">conda: command not found解决办法:</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#解决ubuntu新添加用户不能sudo"><span class="nav-number">1.</span> <span class="nav-text">解决ubuntu新添加用户不能sudo</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#机理分析"><span class="nav-number">2.</span> <span class="nav-text">机理分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#关于新添加用户环境的心得"><span class="nav-number">3.</span> <span class="nav-text">关于新添加用户环境的心得</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#关于conda的使用链接："><span class="nav-number">3.0.1.</span> <span class="nav-text">关于conda的使用链接：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#vim的使用详解"><span class="nav-number">3.0.2.</span> <span class="nav-text">vim的使用详解</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#conda-command-not-found解决办法"><span class="nav-number">3.0.3.</span> <span class="nav-text">conda: command not found解决办法:</span></a></li></ol></li></ol></div>
             
 
           </div>
