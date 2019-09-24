@@ -79,17 +79,17 @@
 
 
 
-<meta name="description" content="字符串的隐性转换在看博客时，突然发现以下程序，并尝试自己运行之后发现了一个自己感觉有趣的现象，直接放代码123string a=&amp;quot;abc&amp;quot;;for(int i = 0;i &amp;lt; 3;i++)    cout &amp;lt;&amp;lt; &amp;amp;a[i] &amp;lt;&amp;lt; &amp;quot; &amp;quot;; 运行程序之后，发现输出的结果是：1abc bc c 初次看到这里感觉有点小懵，明明">
+<meta name="description" content="在gcc编译环境下c++实例化的体会先亮代码：123456789101112131415161718192021#include &amp;lt;iostream&amp;gt;using namespace std;class Shape&amp;#123;public:    enum ShapeColor &amp;#123;Red,Green,Blue&amp;#125;;    virtual void draw(ShapeC">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Yu&#39;s blog">
-<meta property="og:url" content="http://yoursite.com/2019/08/02/string/index.html">
+<meta property="og:title" content="effe_36">
+<meta property="og:url" content="http://yoursite.com/2019/09/24/effe-36/index.html">
 <meta property="og:site_name" content="Yu&#39;s blog">
-<meta property="og:description" content="字符串的隐性转换在看博客时，突然发现以下程序，并尝试自己运行之后发现了一个自己感觉有趣的现象，直接放代码123string a=&amp;quot;abc&amp;quot;;for(int i = 0;i &amp;lt; 3;i++)    cout &amp;lt;&amp;lt; &amp;amp;a[i] &amp;lt;&amp;lt; &amp;quot; &amp;quot;; 运行程序之后，发现输出的结果是：1abc bc c 初次看到这里感觉有点小懵，明明">
+<meta property="og:description" content="在gcc编译环境下c++实例化的体会先亮代码：123456789101112131415161718192021#include &amp;lt;iostream&amp;gt;using namespace std;class Shape&amp;#123;public:    enum ShapeColor &amp;#123;Red,Green,Blue&amp;#125;;    virtual void draw(ShapeC">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-09-24T01:51:04.011Z">
+<meta property="og:updated_time" content="2019-09-24T06:34:15.558Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Yu&#39;s blog">
-<meta name="twitter:description" content="字符串的隐性转换在看博客时，突然发现以下程序，并尝试自己运行之后发现了一个自己感觉有趣的现象，直接放代码123string a=&amp;quot;abc&amp;quot;;for(int i = 0;i &amp;lt; 3;i++)    cout &amp;lt;&amp;lt; &amp;amp;a[i] &amp;lt;&amp;lt; &amp;quot; &amp;quot;; 运行程序之后，发现输出的结果是：1abc bc c 初次看到这里感觉有点小懵，明明">
+<meta name="twitter:title" content="effe_36">
+<meta name="twitter:description" content="在gcc编译环境下c++实例化的体会先亮代码：123456789101112131415161718192021#include &amp;lt;iostream&amp;gt;using namespace std;class Shape&amp;#123;public:    enum ShapeColor &amp;#123;Red,Green,Blue&amp;#125;;    virtual void draw(ShapeC">
 
 
 
@@ -119,13 +119,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/08/02/string/">
+  <link rel="canonical" href="http://yoursite.com/2019/09/24/effe-36/">
 
 
 
 
 
-  <title> | Yu's blog</title>
+  <title>effe_36 | Yu's blog</title>
   
 
 
@@ -232,7 +232,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/02/string/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/24/effe-36/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="YuZhengshun">
@@ -249,7 +249,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline"></h1>
+          <h1 class="post-title" itemprop="name headline">effe_36</h1>
         
 
         <div class="post-meta">
@@ -261,8 +261,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-08-02T00:14:57+08:00">
-                2019-08-02
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-09-24T14:34:01+08:00">
+                2019-09-24
               </time>
             
 
@@ -299,9 +299,12 @@
       
 
       
-        <h2 id="字符串的隐性转换"><a href="#字符串的隐性转换" class="headerlink" title="字符串的隐性转换"></a>字符串的隐性转换</h2><p>在看博客时，突然发现以下程序，并尝试自己运行之后发现了一个自己感觉有趣的现象，直接放代码<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">string a=&quot;abc&quot;;</span><br><span class="line">for(int i = 0;i &lt; 3;i++)</span><br><span class="line">    cout &lt;&lt; &amp;a[i] &lt;&lt; &quot; &quot;;</span><br></pre></td></tr></table></figure></p>
-<p>运行程序之后，发现输出的结果是：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">abc bc c</span><br></pre></td></tr></table></figure></p>
-<p>初次看到这里感觉有点小懵，明明是输入的是地址，为啥输出的是值呢？<br>仔细分析之后个人得出结论，发生了从char*类型向</p>
+        <h2 id="在gcc编译环境下c-实例化的体会"><a href="#在gcc编译环境下c-实例化的体会" class="headerlink" title="在gcc编译环境下c++实例化的体会"></a>在gcc编译环境下c++实例化的体会</h2><p>先亮代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;iostream&gt;</span><br><span class="line">using namespace std;</span><br><span class="line">class Shape&#123;</span><br><span class="line">public:</span><br><span class="line">    enum ShapeColor &#123;Red,Green,Blue&#125;;</span><br><span class="line">    virtual void draw(ShapeColor color = Red) const = 0;//纯虚函数</span><br><span class="line">    //考虑一下，这里是否需要虚析构函数，应该还是需要的，因为相当于成员函数的覆盖。</span><br><span class="line">    //这样的话导致派生类的成员没有得到释放，会造成内存泄漏</span><br><span class="line">    virtual ~Shape()&#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">class Circle : public Shape&#123;</span><br><span class="line">public:</span><br><span class="line">    Circle(string foo = &quot;wow&quot;):foo(foo)&#123;&#125;</span><br><span class="line">    void draw(ShapeColor color = Green) const&#123;</span><br><span class="line">        cout &lt;&lt; &quot;Derived Color &quot; &lt;&lt; color &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">private:</span><br><span class="line">    string foo;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<p>这里在测试effetive C++ 36条的时候发现了一个有趣的现象<br>如下所示：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Circle test1();</span><br><span class="line">Circle test2;</span><br><span class="line">//test1.draw() //这里会报错，而且在调试的时候没有显示test1的变量</span><br><span class="line">test2.draw() //这里没有报错</span><br></pre></td></tr></table></figure></p>
+<p>这里当时我就懵了，因为这里的构造函数本来就是缺省的，为什么上面的代码会出现报错呢？直接报错如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">request for member&apos;draw&apos; in &apos;test1&apos;,which is of non-class type &apos;Circle()&apos;</span><br></pre></td></tr></table></figure></p>
+<p>为了进行对比实验，我又设计如下部分缺省类:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">class Circle : public Shape&#123;</span><br><span class="line">public:</span><br><span class="line">    Circle(string contr,string foo = &quot;wow&quot;):contr(contr),foo(foo)&#123;&#125;</span><br><span class="line">    void draw(ShapeColor color = Green) const&#123;</span><br><span class="line">        cout &lt;&lt; &quot;Derived Color &quot; &lt;&lt; color &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">private:</span><br><span class="line">    string contr;</span><br><span class="line">    string foo;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<p>然后在主函数中写如下代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Circle test3(&quot;contr&quot;);</span><br><span class="line">test3.draw();</span><br></pre></td></tr></table></figure></p>
+<p>这回就没有报错，排除了缺省的问题之后，那么之前的现象该如何解释呢？<br>c++类中有默认的big three函数，其中一只就是拷贝构造函数，如果没有手动实现的话，编译器会默认为我们实现一个，如果是之前的现象我猜想是编译器默认将Circle test1()调用了拷贝构造函数，而不是缺省的构造函数，又由于括号中为空，所以报错(“non-class type”)，而Circle test2是调用默认的构造函数，但是由于构造函数已经手动实现了，所以正确调用了缺省的构造函数。<br>本来是想测试effetive C++ 36条中的虚函数中的缺省参数的绑定问题，无意间发现我看来还蛮有趣的现象，在此做一哈记录。</p>
 
       
     </div>
@@ -326,8 +329,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/07/20/sudo/" rel="next" title="ubuntu添加用户时的使用心得">
-                <i class="fa fa-chevron-left"></i> ubuntu添加用户时的使用心得
+              <a href="/2019/09/24/new-and-operator-new/" rel="next" title="new_and_operator_new">
+                <i class="fa fa-chevron-left"></i> new_and_operator_new
               </a>
             
           </div>
@@ -336,8 +339,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/09/24/c-learn-gain/" rel="prev" title="c++学习心得">
-                c++学习心得 <i class="fa fa-chevron-right"></i>
+              <a href="/2019/09/24/shorest-path/" rel="prev" title="shorest-path">
+                shorest-path <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -454,7 +457,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#字符串的隐性转换"><span class="nav-number">1.</span> <span class="nav-text">字符串的隐性转换</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#在gcc编译环境下c-实例化的体会"><span class="nav-number">1.</span> <span class="nav-text">在gcc编译环境下c++实例化的体会</span></a></li></ol></div>
             
 
           </div>

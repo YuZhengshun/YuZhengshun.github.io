@@ -229,6 +229,254 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/24/shorest-path/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="YuZhengshun">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yu's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/09/24/shorest-path/" itemprop="url">shorest-path</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-09-24T19:34:26+08:00">
+                2019-09-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="最短路径的两种算法的C-算法-附实现代码解析"><a href="#最短路径的两种算法的C-算法-附实现代码解析" class="headerlink" title="最短路径的两种算法的C++算法(附实现代码解析)"></a>最短路径的两种算法的C++算法(附实现代码解析)</h2><h3 id="无权图的最短路径的实现"><a href="#无权图的最短路径的实现" class="headerlink" title="无权图的最短路径的实现"></a>无权图的最短路径的实现</h3><p>代码如下所示，其中nodes初始值为-1(不可能的值),表示这个nodes结果的输出为上一个节点的坐标<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">vector&lt;int&gt; shortest_path(vector&lt;vector&lt;int&gt;&gt; &amp;path,vector&lt;int&gt; &amp;nodes)&#123;</span><br><span class="line">    //其中path保留一下信息，每个节点的所连接的节点，类似如临界表的形式</span><br><span class="line">    //nodes保存的是原始的初始信息，其中下标为nodes的</span><br><span class="line">    //默认从第一个节点开始的最短路径到目标节点</span><br><span class="line">    //默认nodes保存的开始都是-1</span><br><span class="line">    int size = nodes.size();</span><br><span class="line">    vector&lt;int&gt; weight(size,0);</span><br><span class="line">    nodes[0] = 0;</span><br><span class="line">    queue&lt;int&gt; tmp;</span><br><span class="line">    tmp.push(0);</span><br><span class="line">    while(!tmp.empty())&#123;</span><br><span class="line">        for(int i = 0;i &lt; tmp.size();i++)&#123;</span><br><span class="line">            int pp = tmp.front();</span><br><span class="line">            tmp.pop();</span><br><span class="line">            int len = path[pp].size();</span><br><span class="line">            for(int j = 0;j &lt; len;j++)&#123;</span><br><span class="line">                if(nodes[path[pp][j]] == -1)&#123;</span><br><span class="line">                    tmp.push(path[pp][j]);//压入这个队列</span><br><span class="line">                    weight[path[pp][j]] = weight[pp] + 1;</span><br><span class="line">                    nodes[path[pp][j]] = pp;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return weight;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="无权图的最短路径的测试函数"><a href="#无权图的最短路径的测试函数" class="headerlink" title="无权图的最短路径的测试函数"></a>无权图的最短路径的测试函数</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">//有权最短路径的测试函数</span><br><span class="line">void testNoWeiFuc()&#123;</span><br><span class="line">    vector&lt;int&gt; nodes(6,-1);</span><br><span class="line">    vector&lt;vector&lt;int&gt;&gt; path;</span><br><span class="line">    path.push_back(vector&lt;int&gt;(&#123;2,3&#125;));</span><br><span class="line">    path.push_back(vector&lt;int&gt;(&#123;2,4,5&#125;));</span><br><span class="line">    path.push_back(vector&lt;int&gt;(&#123;0,1&#125;));</span><br><span class="line">    path.push_back(vector&lt;int&gt;(&#123;0,4&#125;));</span><br><span class="line">    path.push_back(vector&lt;int&gt;(&#123;1,4&#125;));</span><br><span class="line">    vector&lt;int&gt;weigth = shortest_path(path,nodes);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="有权图的最短路径算法"><a href="#有权图的最短路径算法" class="headerlink" title="有权图的最短路径算法"></a>有权图的最短路径算法</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">vector&lt;int&gt; shortest_path_wei(vector&lt;vector&lt;pair&lt;int,int&gt;&gt;&gt; &amp;path,vector&lt;int&gt; &amp;nodes)&#123;</span><br><span class="line">    //其中的pair中第一个是节点值，第二个是其中节点的最短路径目前的路径的大小</span><br><span class="line">    //state记录定点的是否被访问过的标志</span><br><span class="line">    //其中这个dkstra算法不适合存在负值的情况</span><br><span class="line">    int size = nodes.size();</span><br><span class="line">    vector&lt;int&gt; weight(size,99999);//规定这个为最大值</span><br><span class="line">    weight[0] = 0;</span><br><span class="line">    //使用仿函数</span><br><span class="line">    //第一个值是权值大小，第二个是节点值</span><br><span class="line">    vector&lt;pair&lt;int,int&gt;&gt; weiPath;</span><br><span class="line">    for(int i = 0;i &lt; size;i++)&#123;</span><br><span class="line">        weiPath.push_back(make_pair(9999,i));</span><br><span class="line">    &#125;</span><br><span class="line">    weiPath[0].first = 0;</span><br><span class="line">    //不行自己写一个排序判断就好了</span><br><span class="line">    while(!weiPath.empty())&#123;</span><br><span class="line">        make_heap(weiPath.begin(),weiPath.end(),greater&lt;pair&lt;int,int&gt;&gt;());</span><br><span class="line">        int nowNode = weiPath.front().second;//当前节点值</span><br><span class="line">        int len = path[nowNode].size();</span><br><span class="line">        for(int i = 0;i &lt; len;i++)&#123;</span><br><span class="line">            int nextNode = path[nowNode][i].first;</span><br><span class="line">            int nextWei = path[nowNode][i].second;</span><br><span class="line">            if(weight[nextNode] &gt; weight[nowNode] + nextWei)&#123;</span><br><span class="line">                weight[nextNode] = weight[nowNode] + nextWei;</span><br><span class="line">                nodes[nextNode] = nowNode;</span><br><span class="line">            &#125;</span><br><span class="line">            // if(weight[path[tmp][i].first] &gt; weight[weiPath.front().second] + path[])</span><br><span class="line">        &#125;</span><br><span class="line">        pop_heap(weiPath.begin(),weiPath.end(),greater&lt;pair&lt;int,int&gt;&gt;());</span><br><span class="line">        weiPath.pop_back();</span><br><span class="line">    &#125;</span><br><span class="line">    return weight;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="有权图的最短路径算法测试函数"><a href="#有权图的最短路径算法测试函数" class="headerlink" title="有权图的最短路径算法测试函数"></a>有权图的最短路径算法测试函数</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">void testWeiFuc&#123;</span><br><span class="line">    vector&lt;int&gt; nodes(6,-1);</span><br><span class="line">    vector&lt;vector&lt;pair&lt;int,int&gt;&gt;&gt; path;</span><br><span class="line">    path.push_back(&#123;pair&lt;int,int&gt;(1,2),pair&lt;int,int&gt;(2,1),pair&lt;int,int&gt;(4,4)&#125;);//0</span><br><span class="line">    path.push_back(&#123;pair&lt;int,int&gt;(0,2),pair&lt;int,int&gt;(2,2)&#125;);//1</span><br><span class="line">    path.push_back(&#123;pair&lt;int,int&gt;(0,1),pair&lt;int,int&gt;(1,2),pair&lt;int,int&gt;(3,3),pair&lt;int,int&gt;(4,1)&#125;);//2</span><br><span class="line">    path.push_back(&#123;pair&lt;int,int&gt;(2,3),pair&lt;int,int&gt;(5,1)&#125;);//3</span><br><span class="line">    path.push_back(&#123;pair&lt;int,int&gt;(0,4),pair&lt;int,int&gt;(2,1),pair&lt;int,int&gt;(5,2)&#125;);//4</span><br><span class="line">    path.push_back(&#123;pair&lt;int,int&gt;(3,1),pair&lt;int,int&gt;(4,2)&#125;);//5</span><br><span class="line">    vector&lt;int&gt; weight = shortest_path_wei(path,nodes);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/24/effe-36/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="YuZhengshun">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yu's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/09/24/effe-36/" itemprop="url">effe_36</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-09-24T14:34:01+08:00">
+                2019-09-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="在gcc编译环境下c-实例化的体会"><a href="#在gcc编译环境下c-实例化的体会" class="headerlink" title="在gcc编译环境下c++实例化的体会"></a>在gcc编译环境下c++实例化的体会</h2><p>先亮代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;iostream&gt;</span><br><span class="line">using namespace std;</span><br><span class="line">class Shape&#123;</span><br><span class="line">public:</span><br><span class="line">    enum ShapeColor &#123;Red,Green,Blue&#125;;</span><br><span class="line">    virtual void draw(ShapeColor color = Red) const = 0;//纯虚函数</span><br><span class="line">    //考虑一下，这里是否需要虚析构函数，应该还是需要的，因为相当于成员函数的覆盖。</span><br><span class="line">    //这样的话导致派生类的成员没有得到释放，会造成内存泄漏</span><br><span class="line">    virtual ~Shape()&#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">class Circle : public Shape&#123;</span><br><span class="line">public:</span><br><span class="line">    Circle(string foo = &quot;wow&quot;):foo(foo)&#123;&#125;</span><br><span class="line">    void draw(ShapeColor color = Green) const&#123;</span><br><span class="line">        cout &lt;&lt; &quot;Derived Color &quot; &lt;&lt; color &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">private:</span><br><span class="line">    string foo;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<p>这里在测试effetive C++ 36条的时候发现了一个有趣的现象<br>如下所示：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Circle test1();</span><br><span class="line">Circle test2;</span><br><span class="line">//test1.draw() //这里会报错，而且在调试的时候没有显示test1的变量</span><br><span class="line">test2.draw() //这里没有报错</span><br></pre></td></tr></table></figure></p>
+<p>这里当时我就懵了，因为这里的构造函数本来就是缺省的，为什么上面的代码会出现报错呢？直接报错如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">request for member&apos;draw&apos; in &apos;test1&apos;,which is of non-class type &apos;Circle()&apos;</span><br></pre></td></tr></table></figure></p>
+<p>为了进行对比实验，我又设计如下部分缺省类:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">class Circle : public Shape&#123;</span><br><span class="line">public:</span><br><span class="line">    Circle(string contr,string foo = &quot;wow&quot;):contr(contr),foo(foo)&#123;&#125;</span><br><span class="line">    void draw(ShapeColor color = Green) const&#123;</span><br><span class="line">        cout &lt;&lt; &quot;Derived Color &quot; &lt;&lt; color &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">private:</span><br><span class="line">    string contr;</span><br><span class="line">    string foo;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<p>然后在主函数中写如下代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Circle test3(&quot;contr&quot;);</span><br><span class="line">test3.draw();</span><br></pre></td></tr></table></figure></p>
+<p>这回就没有报错，排除了缺省的问题之后，那么之前的现象该如何解释呢？<br>c++类中有默认的big three函数，其中一只就是拷贝构造函数，如果没有手动实现的话，编译器会默认为我们实现一个，如果是之前的现象我猜想是编译器默认将Circle test1()调用了拷贝构造函数，而不是缺省的构造函数，又由于括号中为空，所以报错(“non-class type”)，而Circle test2是调用默认的构造函数，但是由于构造函数已经手动实现了，所以正确调用了缺省的构造函数。<br>本来是想测试effetive C++ 36条中的虚函数中的缺省参数的绑定问题，无意间发现我看来还蛮有趣的现象，在此做一哈记录。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/24/new-and-operator-new/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1093,7 +1341,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-count">8</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
