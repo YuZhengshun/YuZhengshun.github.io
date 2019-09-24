@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="在学习了一段时间编程后稍微有一点心得，在此做一下整理，梳理一下思路，如果够篇幅的话就写出一篇博客在之前学习makefile文件的格式的时候突然明白了一个问题就是我之前在网上教程写vscode的c++配置文件，我是用的编译器是gcc写了一个简单的hello程序成功运行，我以为配置文件就是ok的了，但是遇到一个问题，就是如果我的一个源文件在调用我自己写的源文件中函数时候会出现报错，报错如下：1有时间再">
+<meta property="og:type" content="article">
+<meta property="og:title" content="c++学习心得">
+<meta property="og:url" content="http://yoursite.com/2019/09/24/c-learn-gain/index.html">
+<meta property="og:site_name" content="Yu&#39;s blog">
+<meta property="og:description" content="在学习了一段时间编程后稍微有一点心得，在此做一下整理，梳理一下思路，如果够篇幅的话就写出一篇博客在之前学习makefile文件的格式的时候突然明白了一个问题就是我之前在网上教程写vscode的c++配置文件，我是用的编译器是gcc写了一个简单的hello程序成功运行，我以为配置文件就是ok的了，但是遇到一个问题，就是如果我的一个源文件在调用我自己写的源文件中函数时候会出现报错，报错如下：1有时间再">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-09-24T06:28:21.910Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="c++学习心得">
+<meta name="twitter:description" content="在学习了一段时间编程后稍微有一点心得，在此做一下整理，梳理一下思路，如果够篇幅的话就写出一篇博客在之前学习makefile文件的格式的时候突然明白了一个问题就是我之前在网上教程写vscode的c++配置文件，我是用的编译器是gcc写了一个简单的hello程序成功运行，我以为配置文件就是ok的了，但是遇到一个问题，就是如果我的一个源文件在调用我自己写的源文件中函数时候会出现报错，报错如下：1有时间再">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/09/24/c-learn-gain/">
+
+
+
+
+
+  <title>c++学习心得 | Yu's blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Yu's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/24/c-learn-gain/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="YuZhengshun">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yu's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">c++学习心得</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-09-24T14:27:13+08:00">
+                2019-09-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>在学习了一段时间编程后稍微有一点心得，在此做一下整理，梳理一下思路，如果够篇幅的话就写出一篇博客<br>在之前学习makefile文件的格式的时候突然明白了一个问题就是我之前在网上教程写vscode的c++配置文件，我是用的编译器是gcc<br>写了一个简单的hello程序成功运行，我以为配置文件就是ok的了，但是遇到一个问题，就是如果我的一个源文件在调用我自己写的源文件中函数时候会出现报错，报错如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">有时间再添加进去</span><br></pre></td></tr></table></figure></p>
+<p>我就一脸懵逼，如果大家也有此种问题，也可以看看，我会给出解决方案以及背后的机制说明，我花了好久不停的学习c++才慢慢领会到的，在此也顺便记录一下，主要的原因出在task.json文件中，我的task.json之前的文件如下所示：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;version&quot;: &quot;2.0.0&quot;,</span><br><span class="line">    &quot;command&quot;: &quot;g++&quot;,</span><br><span class="line">    &quot;args&quot;: [</span><br><span class="line">        &quot;-g&quot;,</span><br><span class="line">        &quot;$&#123;file&#125;&quot;,</span><br><span class="line">        &quot;-o&quot;,</span><br><span class="line">        &quot;$&#123;fileBasenameNoExtension&#125;.exe&quot;</span><br><span class="line">    ],  // 编译命令参数</span><br><span class="line">    &quot;problemMatcher&quot;: &#123;</span><br><span class="line">        &quot;owner&quot;: &quot;cpp&quot;,</span><br><span class="line">        &quot;fileLocation&quot;: [&quot;relative&quot;, &quot;$&#123;workspaceRoot&#125;&quot;],</span><br><span class="line">        &quot;pattern&quot;: &#123;</span><br><span class="line">            &quot;regexp&quot;: &quot;^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$&quot;,</span><br><span class="line">            &quot;file&quot;: 1,</span><br><span class="line">            &quot;line&quot;: 2,</span><br><span class="line">            &quot;column&quot;: 3,</span><br><span class="line">            &quot;severity&quot;: 4,</span><br><span class="line">            &quot;message&quot;: 5</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这里大家可能对于task.json 和 lauch.json 以及 setttings.json文件不太明白它们的意思，我会整理一下自己的思路写在后面或者篇幅够的话就另开一篇blog(我先挖坑一下)，先说明json文件只是一种数据交换格式这点要先明确，另外对于vscode软件来说，它本身是不提供代码的编译和调试的功能的，那么我们使用的编译和调试是如何进行的呢？<br>以下都是自己的猜想，以后有时间证实后(或者证实错误)都会补充说明，vscode简单来说就是靠这三个配置文件，根据三个文件的中的参数进行对于编译器的调用，例如我这台机器就是对于g++的调用，然后将g++的编译结果输入到界面上而已，有点前端和后端的意思。</p>
+<hr>
+<p>理解到这，我发现task.json文件中和makefile的文件中有一种莫名的相似感，尤其是对于args参数这里，两个相互印证再加上一直以来一直思考程序是如何被运行的？include的作用到底是什么？在不同的源文件中调用函数编译器是如何知道的？申明和定义的作用分别是什么？前向申明和指针引用的关系？相互包含或者说是内部嵌套自身为什么可以？如果你是编程的新新手，或许看着这些问题没什么联系，或者你也感觉到了这些困扰还没有知道答案，如果你都知道了就没必要看下去了，如果你不知道，我会给出所有问题的答案，严格来说，他们的终极问题都是相似的，我会尽自己所能将这些说的明白，对于更底层的问题我这里技术薄弱可能无法给出更加详细的解答了，可能以后我更加精进之后会再写一些。</p>
+<hr>
+<p>为了说明这些，我尝试从申明和定义概念说起，逐步深入谈一下，不知道这么比如是否恰当，申明网上是说用于向程序表明变量或者函数的类型和名字，全局变量和函数本质上是没有什么区别的，这里为了说明我的观点，变量和函数的申明我比如一个接口，对于接口来说用户只知道最基本的信息，对于函数申明，你只知道返回值，函数名等你可以想一想函数重载的知识就比较明了，对于变量申明，你只知道类型，假如你自己定义的类，如果你出现如下代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">class Complex;//类型的申明</span><br><span class="line">void print(Complex c)&#123;</span><br><span class="line">    cout &lt;&lt; c.rel &lt;&lt; &quot; &quot; &lt;&lt; c.img &lt;&lt; endl;</span><br><span class="line">&#125;</span><br><span class="line">//类型的定义</span><br><span class="line">class Complex&#123;</span><br><span class="line">    private:</span><br><span class="line">        double rel;</span><br><span class="line">        double img;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<p>不出意外的话，使用print函数是会报错的，因为print函数调用Complex类时候，只知道它的类型为Complex而并不知道类中成员变量，你如果这么写：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">class Complex;//类型的申明</span><br><span class="line">void print(Complex c);//函数的申明</span><br><span class="line"></span><br><span class="line">//类型的定义</span><br><span class="line">class Complex&#123;</span><br><span class="line">    private:</span><br><span class="line">        double rel;</span><br><span class="line">        double img;</span><br><span class="line">&#125;;</span><br><span class="line">//函数的定义</span><br><span class="line">void print(Complex c)&#123;</span><br><span class="line">    cout &lt;&lt; c.rel &lt;&lt; &quot; &quot; &lt;&lt; c.img &lt;&lt; endl;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<hr>
+<p>下面是我又抽空继续写，之前写了写了不知道怎么写了</p>
+<p>这样写是没有问题的，总这里可以可以看出编程语言的逻辑性，即无法知晓未知(包括你所在语句的后面的变量，函数，类，结构体等)，如果你强行这么写，编译器一定会给你报个错，比如在结构体中定义自身成员，因为结构体在定义自身的时候还不知道自己是啥样子，所以在编程语言中也是无法突破因果关系的。如果能理解编程中的因果关系，那么对于很多的编译器的约束规则也就能理解了。</p>
+<p>接下来继续谈谈申明和定义，其实将一个“对象”拆分为申明和定义这种行为在C++中体现了很多，正如我将其说成“对象”，因为它很能体现OOP的思想，例如一个模块分为头文件和源文件(将类分为申明和实现),这种做法有很多好处，例如，可以将将接口和实现分离从而实现数据保护，以及代码的稳定性等等，正好符合设计模式中的接口隔离原则，以及实现模块的高内聚和松耦合的特点，上面说的是往上层的演化，上升到抽象层面上；如果往下看，从编译器的角度上看，这样的好处也是很明显的，由于松耦合导致模块间的相对独立使得编译器可以相对独立的实现不同模块间的独立编译，可以看看C++ plus中前面对于程序编译和链接的过程和这里正好对应，这样做有一个很明显的好处，就编译环节来说，如果项目特别大的时候，你正好又修改了其中的一小部分，这样只需要独立编译涉及到修改的模块的编译而不需要将所有的源文件都编译一遍从而节省很多时间。其实再想一想，如果底层都是独立的，那么上层的逻辑关系应该也是泾渭分明的，因为你面对的无论是往上谈对象思想，到下面的具体实现以及如何编译都是面对的都是同一个东西，只是你看的角度不同而已，而其中的特点应该是贯穿所有。另外再多说一句，这种思想其实不仅仅是在编程中，而是人类在长久以来解决问题中流淌于血脉中，分治思想!而接口和实现就是这种思想的一种具体措施。所以无论是编译过程中还是上层思想，这种统一应该更加不足为奇了。</p>
+<p>上面口齿不清乱七八糟的谈了很多自己的拙见，还是得落地技术谈一谈具体实例，我的水平肯定是说不了很深，在此推荐一本书《程序员的自我修养》，其中很详细的谈了程序生前和往生，我就最上面的报错简单说明一下我的解决办法，按照网上的教程是无法实现调用自己写的源文件，这点因为你的源文件没有编译!!”${file}”就是当前你编译的main函数所在的文件，vscode只是将这个文件的名称传入编译器，但是其他的文件没有编译，所以就算你的语法没有问题，但是又如何实现呢？有人说不是include了么？这点我继续说明一下，include的只是头文件，所以你的主文件确确实实是是包含了的，标准库的源文件由于编译器本身就有，所以只要你include了，编译器后面可以自动的链接上去，但是对于你存在编译器中的，就需要你自行添加上去，所以说include的作用确实如名称一样，只是将头文件include进去了，我想如果你将其他的源文件include进去应该也是可以的。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#include &quot;xxx.cpp&quot;//include的作用正如include一样而已</span><br></pre></td></tr></table></figure></p>
+<p>但是这种情况就相当于你将其他的源文件写到一个程序中，也就达不到模块的松耦合的特点了，记住本来不同模块之间就是相对独立的，所以你将所有的需要的源文件都要写入json文件中本来就是应该的，最终编译器自动的将其链接起来而已。所以解决办法就是将你需要的源文件名称都要写进去，但是此时可能会有很多个源文件，都写进去太麻烦了，我自己突发奇想，想到了正则匹配的“*”，所以只需要将你需要的放到一个文件夹中，如下所示：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;version&quot;: &quot;2.0.0&quot;,</span><br><span class="line">    &quot;command&quot;: &quot;g++&quot;,</span><br><span class="line">    &quot;args&quot;: [</span><br><span class="line">        &quot;-g&quot;,</span><br><span class="line">        //&quot;$&#123;file&#125;&quot;,</span><br><span class="line">        &quot;*.cpp&quot;,//这样就解决啦</span><br><span class="line">        &quot;-o&quot;,</span><br><span class="line">        &quot;$&#123;fileBasenameNoExtension&#125;.exe&quot;</span><br><span class="line">    ],  // 编译命令参数</span><br><span class="line">    &quot;problemMatcher&quot;: &#123;</span><br><span class="line">        &quot;owner&quot;: &quot;cpp&quot;,</span><br><span class="line">        &quot;fileLocation&quot;: [&quot;relative&quot;, &quot;$&#123;workspaceRoot&#125;&quot;],</span><br><span class="line">        &quot;pattern&quot;: &#123;</span><br><span class="line">            &quot;regexp&quot;: &quot;^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$&quot;,</span><br><span class="line">            &quot;file&quot;: 1,</span><br><span class="line">            &quot;line&quot;: 2,</span><br><span class="line">            &quot;column&quot;: 3,</span><br><span class="line">            &quot;severity&quot;: 4,</span><br><span class="line">            &quot;message&quot;: 5</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>为我的机智点个赞，哈哈。</p>
+<p>学习c++的实际时间不长才几个月，所以有些观点难免有问题，希望大家多多指正，相互学习进步</p>
+<hr>
+<p>学习这个markdown的语法<br><a href="https://blog.csdn.net/xinyu1026/article/details/78703449" target="_blank" rel="noopener">zheli</a></p>
+<blockquote>
+<p><a href="https://blog.csdn.net/xinyu1026/article/details/78703449" target="_blank" rel="noopener">https://blog.csdn.net/xinyu1026/article/details/78703449</a></p>
+</blockquote>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/08/02/string/" rel="next" title>
+                <i class="fa fa-chevron-left"></i> 
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/09/24/new-and-operator-new/" rel="prev" title="new_and_operator_new">
+                new_and_operator_new <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.png" alt="YuZhengshun">
+            
+              <p class="site-author-name" itemprop="name">YuZhengshun</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">YuZhengshun</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+<!-- 新增访客统计代码 -->
+
+<div class="busuanzi-count">
+    <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="site-uv">
+      <i class="fa fa-user"></i>
+      访问用户： <span class="busuanzi-value" id="busuanzi_value_site_uv"></span> 人
+    </span>
+    <div class="powered-by"></div>
+    <span class="site-uv">
+      <i class="fa fa-eye"></i>
+      访问次数： <span class="busuanzi-value" id="busuanzi_value_site_pv"></span> 次
+    </span>
+    <!-- 博客字数统计 -->
+    <span class="site-pv">
+      <i class="fa fa-pencil"></i>
+      博客全站共： <span class="post-count"></span> 字
+    </span>
+</div>
+<!-- 新增访客统计代码 END-->
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

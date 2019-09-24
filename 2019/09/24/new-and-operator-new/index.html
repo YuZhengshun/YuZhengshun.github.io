@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="近期学习new和operator new的心得近期学习关于操作符重载的时候在论坛上看到这样一段代码，如下：1234567891011121314151617181920212223242526#include &amp;quot;stdafx.h&amp;quot;//这段在我的编译器下报错，我屏蔽之后成功运行，可能是我//的配置文件出了问题（我的配置文件是写c++代码的，不是主要问题）#include &amp;lt;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="new_and_operator_new">
+<meta property="og:url" content="http://yoursite.com/2019/09/24/new-and-operator-new/index.html">
+<meta property="og:site_name" content="Yu&#39;s blog">
+<meta property="og:description" content="近期学习new和operator new的心得近期学习关于操作符重载的时候在论坛上看到这样一段代码，如下：1234567891011121314151617181920212223242526#include &amp;quot;stdafx.h&amp;quot;//这段在我的编译器下报错，我屏蔽之后成功运行，可能是我//的配置文件出了问题（我的配置文件是写c++代码的，不是主要问题）#include &amp;lt;">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-09-24T06:31:51.161Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="new_and_operator_new">
+<meta name="twitter:description" content="近期学习new和operator new的心得近期学习关于操作符重载的时候在论坛上看到这样一段代码，如下：1234567891011121314151617181920212223242526#include &amp;quot;stdafx.h&amp;quot;//这段在我的编译器下报错，我屏蔽之后成功运行，可能是我//的配置文件出了问题（我的配置文件是写c++代码的，不是主要问题）#include &amp;lt;">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/09/24/new-and-operator-new/">
+
+
+
+
+
+  <title>new_and_operator_new | Yu's blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Yu's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/24/new-and-operator-new/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="YuZhengshun">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yu's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">new_and_operator_new</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-09-24T14:31:16+08:00">
+                2019-09-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="近期学习new和operator-new的心得"><a href="#近期学习new和operator-new的心得" class="headerlink" title="近期学习new和operator new的心得"></a>近期学习new和operator new的心得</h2><p>近期学习关于操作符重载的时候在论坛上看到这样一段代码，如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">#include &quot;stdafx.h&quot;//这段在我的编译器下报错，我屏蔽之后成功运行，可能是我</span><br><span class="line">//的配置文件出了问题（我的配置文件是写c++代码的，不是主要问题）</span><br><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line">#include &lt;stdlib.h&gt;</span><br><span class="line">#include &lt;conio.h&gt;</span><br><span class="line"></span><br><span class="line">void* operator new (size_t sz)&#123;</span><br><span class="line">    printf(&quot;new: %d bytes\n&quot;, sz);</span><br><span class="line">    void* m = malloc(sz);</span><br><span class="line">    if (!m)</span><br><span class="line">    puts(&quot;out of memory.\n&quot;);</span><br><span class="line">    return m;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void operator delete (void* p)&#123;</span><br><span class="line">     printf(&quot;delete: \n&quot;);</span><br><span class="line">     free(p);</span><br><span class="line">     return;</span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line">int main()&#123;</span><br><span class="line">    int *p = new int;</span><br><span class="line">    delete p;</span><br><span class="line">    getch();</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这段代码的输出为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">new: 4 bytes</span><br><span class="line">delete://这行在我的电脑中没有显示，我待会会给出我的解释</span><br></pre></td></tr></table></figure></p>
+<p>看完这段代码说实话我第一眼是有点蒙的，有这么几个问题：</p>
+<p>(1)operator new 和 operator delete是什么？如果是函数的话为什么可以中间多一个空格，在我的印象中函数名之间好像不能有空格，尽管这个名称有点特殊</p>
+<p>(2)如果operator new 和 operator delete 是new 和 delete 的操作符重载的话，那么问题来了，无论怎么样你看operator new 的形参是size_t(size_t是整型的typedef)，而 int *p = new int; 显然是类型不符，但是代码是成功运行了而且成功运行了上面的结果。</p>
+<p>(3)就算是操作符的重载，但是重载的显然是基本类型(c++肯定有默认的版本)，如果函数名称和全局的默认函数名称重合以及参数相同的话不就会造成重定义了么，这样按理来说很有可能会造成报错的。</p>
+<p>如果看完我的问题也有同样的问题的小伙伴可以继续看下去，如果是大佬的话就没必要继续看下去了。</p>
+<p>要把这个问题说明白需要加深对于操作符的理解，操作符就是编程中的“+”，“-”，“=”等等符号，我上面提到的操作符重载说的就是这个，操作符本质其实就是函数，如果你和我之前一样有疑惑的话，想想函数的操作符重载其实不就是在写一个个函数么，c++是基于表达式的语言，如果再细致一点的说，c++是基于函数的语言，因为表达式本身就是一个个函数，函数本质就是输入以某种方式输出，正因为如此所以才有编程语言是一门很清楚，很精确的语言，因为理论上只要你的映射是唯一的那么程序就不会产生模糊，机器底层的运行情况也是很符合的(这部分是我自己写到这部分感想的不一定正确)。</p>
+<p>带着这个基本的想法，我去逛逛论坛看看大佬们的解释，以及看到侯捷老师的说法后，总结得到一下解释：</p>
+<p>(1)operator new就是操作符的重载，简而言之就是函数，但是为什么会有空格呢？其实是c++语法特殊规定的，这么说有人肯定会顶我说的是废话，搞了半天就得出这么个结论，不急看看下面的我测试的代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;iostream&gt;</span><br><span class="line">using namespace std;</span><br><span class="line"> </span><br><span class="line">template &lt;typename T&gt;</span><br><span class="line">class Complex&#123;</span><br><span class="line">    private:</span><br><span class="line">        T rel;</span><br><span class="line">        T img;</span><br><span class="line">    public:</span><br><span class="line">        Complex(T x,T y) : rel(x),img(y)&#123;&#125;</span><br><span class="line">        Complex operator +=(const Complex&amp; c1)&#123;</span><br><span class="line">		return Complex(rel+c2.rel,img+c2.img);</span><br><span class="line">	    &#125;</span><br><span class="line">        void print()&#123;</span><br><span class="line">            cout &lt;&lt; rel &lt;&lt; &quot; &quot; &lt;&lt; img;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int main()&#123;</span><br><span class="line">    Complex&lt;int&gt; c1(2,4);</span><br><span class="line">    Complex&lt;int&gt; c2(3,5);</span><br><span class="line">    Complex&lt;int&gt; tmp = c2;</span><br><span class="line">    c2 += c1;</span><br><span class="line">    c2.print();</span><br><span class="line">    tmp.oprator +(c1);//这里的成员函数 &quot;oprator +&quot; 也存在空格!!!</span><br><span class="line">    tmp.print();</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>c2的值和tmp的值是完全一摸一样的，看到这里想必有点清楚了，就是这里对于函数之间存在空格是其实早就存在了，只是停留在c的语法中的印象，另外这里的空格目前我只发现只有oprator关键字配合时才会出现。</p>
+<p>(2)好现在解决第二个疑惑，现在弄明白operator new 是函数时，那么为什么形参的类型会完全不符合而且成功运行呢？其实这其中有两个问题，第一 operator new 根本就不是 new 的重载，并非和 “+” 一样，其中很底层的我现在没有弄得很清楚(估计实力也不行)，c++ 规定 new 关键字是不能重载的(有人说可以重载，这点可能需要以后继续查证，这里先听侯捷老师的)，无论怎么样，你直接可以当 operator new 是某个系统规定操作符的重载就好，所以对于形参的类型不一样就可以完全可以理解了，至于为什么会实现重载函数内部的部分，是因为再进行 new 操作时候其实编译器会将其分解为三步，其中第一步就是 operator new 函数，你重载的是这个函数罢了，所以这一切就有点清楚了。为了进一步的说明，我将第一部分给出的main函数进行一部分修改如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">int main()&#123;</span><br><span class="line">    int aa = 8;</span><br><span class="line">    void *temp = operator new(sizeof(int));//直接调用operator new 函数</span><br><span class="line">    int* p = (int*)temp;</span><br><span class="line">    temp = NULL;//这里防止野指针对程序进行破坏</span><br><span class="line">    delete p;</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>结果效果是相同的,进一步验证之前的猜想。</p>
+<p>(3)那么问题又来了，如果你重载的函数和系统默认的函数发生重定义了怎么办，毕竟operator new 就是分配整型大小的内存空间的函数而已，只要形参和返回值是一样的就会发生重定义，这里就会造成隐患的，于是进一步去查阅和看论坛，结果发现在C++中，这两个函数是运行时库提供的（而不是语言本身），因此在程序中如果重写了全局域的operator new/operator delete函数，那么编译器将会用程序员重写的这一对函数替换运行时库中的实现，注意这里说的是替换，因为理论上这里的函数是可以和系统的函数发生重定义的，但是怎么说呢，特殊情况特殊处理，在ISO C++03中<br>3.7.3 Dynamic storage duration 明确一个单词 replaces 到此基本上问题得以描叙清楚了。(如果还有不清楚的，不是我不想说清楚，是实力不允许…)</p>
+<p>最后至于为什么我的operator delete 为什么没有得到重载，这点我猜测是我重载的并非是系统默认的函数，简而言之就是并没有进行替换，导致使用的还是库中提供的默认的函数(这点只是我的猜测，没有进行进一步的考证)。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/09/24/c-learn-gain/" rel="next" title="c++学习心得">
+                <i class="fa fa-chevron-left"></i> c++学习心得
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.png" alt="YuZhengshun">
+            
+              <p class="site-author-name" itemprop="name">YuZhengshun</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#近期学习new和operator-new的心得"><span class="nav-number">1.</span> <span class="nav-text">近期学习new和operator new的心得</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">YuZhengshun</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+<!-- 新增访客统计代码 -->
+
+<div class="busuanzi-count">
+    <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="site-uv">
+      <i class="fa fa-user"></i>
+      访问用户： <span class="busuanzi-value" id="busuanzi_value_site_uv"></span> 人
+    </span>
+    <div class="powered-by"></div>
+    <span class="site-uv">
+      <i class="fa fa-eye"></i>
+      访问次数： <span class="busuanzi-value" id="busuanzi_value_site_pv"></span> 次
+    </span>
+    <!-- 博客字数统计 -->
+    <span class="site-pv">
+      <i class="fa fa-pencil"></i>
+      博客全站共： <span class="post-count"></span> 字
+    </span>
+</div>
+<!-- 新增访客统计代码 END-->
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

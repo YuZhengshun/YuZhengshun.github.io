@@ -229,6 +229,402 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/24/new-and-operator-new/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="YuZhengshun">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yu's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/09/24/new-and-operator-new/" itemprop="url">new_and_operator_new</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-09-24T14:31:16+08:00">
+                2019-09-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="近期学习new和operator-new的心得"><a href="#近期学习new和operator-new的心得" class="headerlink" title="近期学习new和operator new的心得"></a>近期学习new和operator new的心得</h2><p>近期学习关于操作符重载的时候在论坛上看到这样一段代码，如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">#include &quot;stdafx.h&quot;//这段在我的编译器下报错，我屏蔽之后成功运行，可能是我</span><br><span class="line">//的配置文件出了问题（我的配置文件是写c++代码的，不是主要问题）</span><br><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line">#include &lt;stdlib.h&gt;</span><br><span class="line">#include &lt;conio.h&gt;</span><br><span class="line"></span><br><span class="line">void* operator new (size_t sz)&#123;</span><br><span class="line">    printf(&quot;new: %d bytes\n&quot;, sz);</span><br><span class="line">    void* m = malloc(sz);</span><br><span class="line">    if (!m)</span><br><span class="line">    puts(&quot;out of memory.\n&quot;);</span><br><span class="line">    return m;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void operator delete (void* p)&#123;</span><br><span class="line">     printf(&quot;delete: \n&quot;);</span><br><span class="line">     free(p);</span><br><span class="line">     return;</span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line">int main()&#123;</span><br><span class="line">    int *p = new int;</span><br><span class="line">    delete p;</span><br><span class="line">    getch();</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这段代码的输出为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">new: 4 bytes</span><br><span class="line">delete://这行在我的电脑中没有显示，我待会会给出我的解释</span><br></pre></td></tr></table></figure></p>
+<p>看完这段代码说实话我第一眼是有点蒙的，有这么几个问题：</p>
+<p>(1)operator new 和 operator delete是什么？如果是函数的话为什么可以中间多一个空格，在我的印象中函数名之间好像不能有空格，尽管这个名称有点特殊</p>
+<p>(2)如果operator new 和 operator delete 是new 和 delete 的操作符重载的话，那么问题来了，无论怎么样你看operator new 的形参是size_t(size_t是整型的typedef)，而 int *p = new int; 显然是类型不符，但是代码是成功运行了而且成功运行了上面的结果。</p>
+<p>(3)就算是操作符的重载，但是重载的显然是基本类型(c++肯定有默认的版本)，如果函数名称和全局的默认函数名称重合以及参数相同的话不就会造成重定义了么，这样按理来说很有可能会造成报错的。</p>
+<p>如果看完我的问题也有同样的问题的小伙伴可以继续看下去，如果是大佬的话就没必要继续看下去了。</p>
+<p>要把这个问题说明白需要加深对于操作符的理解，操作符就是编程中的“+”，“-”，“=”等等符号，我上面提到的操作符重载说的就是这个，操作符本质其实就是函数，如果你和我之前一样有疑惑的话，想想函数的操作符重载其实不就是在写一个个函数么，c++是基于表达式的语言，如果再细致一点的说，c++是基于函数的语言，因为表达式本身就是一个个函数，函数本质就是输入以某种方式输出，正因为如此所以才有编程语言是一门很清楚，很精确的语言，因为理论上只要你的映射是唯一的那么程序就不会产生模糊，机器底层的运行情况也是很符合的(这部分是我自己写到这部分感想的不一定正确)。</p>
+<p>带着这个基本的想法，我去逛逛论坛看看大佬们的解释，以及看到侯捷老师的说法后，总结得到一下解释：</p>
+<p>(1)operator new就是操作符的重载，简而言之就是函数，但是为什么会有空格呢？其实是c++语法特殊规定的，这么说有人肯定会顶我说的是废话，搞了半天就得出这么个结论，不急看看下面的我测试的代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;iostream&gt;</span><br><span class="line">using namespace std;</span><br><span class="line"> </span><br><span class="line">template &lt;typename T&gt;</span><br><span class="line">class Complex&#123;</span><br><span class="line">    private:</span><br><span class="line">        T rel;</span><br><span class="line">        T img;</span><br><span class="line">    public:</span><br><span class="line">        Complex(T x,T y) : rel(x),img(y)&#123;&#125;</span><br><span class="line">        Complex operator +=(const Complex&amp; c1)&#123;</span><br><span class="line">		return Complex(rel+c2.rel,img+c2.img);</span><br><span class="line">	    &#125;</span><br><span class="line">        void print()&#123;</span><br><span class="line">            cout &lt;&lt; rel &lt;&lt; &quot; &quot; &lt;&lt; img;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int main()&#123;</span><br><span class="line">    Complex&lt;int&gt; c1(2,4);</span><br><span class="line">    Complex&lt;int&gt; c2(3,5);</span><br><span class="line">    Complex&lt;int&gt; tmp = c2;</span><br><span class="line">    c2 += c1;</span><br><span class="line">    c2.print();</span><br><span class="line">    tmp.oprator +(c1);//这里的成员函数 &quot;oprator +&quot; 也存在空格!!!</span><br><span class="line">    tmp.print();</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>c2的值和tmp的值是完全一摸一样的，看到这里想必有点清楚了，就是这里对于函数之间存在空格是其实早就存在了，只是停留在c的语法中的印象，另外这里的空格目前我只发现只有oprator关键字配合时才会出现。</p>
+<p>(2)好现在解决第二个疑惑，现在弄明白operator new 是函数时，那么为什么形参的类型会完全不符合而且成功运行呢？其实这其中有两个问题，第一 operator new 根本就不是 new 的重载，并非和 “+” 一样，其中很底层的我现在没有弄得很清楚(估计实力也不行)，c++ 规定 new 关键字是不能重载的(有人说可以重载，这点可能需要以后继续查证，这里先听侯捷老师的)，无论怎么样，你直接可以当 operator new 是某个系统规定操作符的重载就好，所以对于形参的类型不一样就可以完全可以理解了，至于为什么会实现重载函数内部的部分，是因为再进行 new 操作时候其实编译器会将其分解为三步，其中第一步就是 operator new 函数，你重载的是这个函数罢了，所以这一切就有点清楚了。为了进一步的说明，我将第一部分给出的main函数进行一部分修改如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">int main()&#123;</span><br><span class="line">    int aa = 8;</span><br><span class="line">    void *temp = operator new(sizeof(int));//直接调用operator new 函数</span><br><span class="line">    int* p = (int*)temp;</span><br><span class="line">    temp = NULL;//这里防止野指针对程序进行破坏</span><br><span class="line">    delete p;</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>结果效果是相同的,进一步验证之前的猜想。</p>
+<p>(3)那么问题又来了，如果你重载的函数和系统默认的函数发生重定义了怎么办，毕竟operator new 就是分配整型大小的内存空间的函数而已，只要形参和返回值是一样的就会发生重定义，这里就会造成隐患的，于是进一步去查阅和看论坛，结果发现在C++中，这两个函数是运行时库提供的（而不是语言本身），因此在程序中如果重写了全局域的operator new/operator delete函数，那么编译器将会用程序员重写的这一对函数替换运行时库中的实现，注意这里说的是替换，因为理论上这里的函数是可以和系统的函数发生重定义的，但是怎么说呢，特殊情况特殊处理，在ISO C++03中<br>3.7.3 Dynamic storage duration 明确一个单词 replaces 到此基本上问题得以描叙清楚了。(如果还有不清楚的，不是我不想说清楚，是实力不允许…)</p>
+<p>最后至于为什么我的operator delete 为什么没有得到重载，这点我猜测是我重载的并非是系统默认的函数，简而言之就是并没有进行替换，导致使用的还是库中提供的默认的函数(这点只是我的猜测，没有进行进一步的考证)。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/24/c-learn-gain/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="YuZhengshun">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yu's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/09/24/c-learn-gain/" itemprop="url">c++学习心得</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-09-24T14:27:13+08:00">
+                2019-09-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>在学习了一段时间编程后稍微有一点心得，在此做一下整理，梳理一下思路，如果够篇幅的话就写出一篇博客<br>在之前学习makefile文件的格式的时候突然明白了一个问题就是我之前在网上教程写vscode的c++配置文件，我是用的编译器是gcc<br>写了一个简单的hello程序成功运行，我以为配置文件就是ok的了，但是遇到一个问题，就是如果我的一个源文件在调用我自己写的源文件中函数时候会出现报错，报错如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">有时间再添加进去</span><br></pre></td></tr></table></figure></p>
+<p>我就一脸懵逼，如果大家也有此种问题，也可以看看，我会给出解决方案以及背后的机制说明，我花了好久不停的学习c++才慢慢领会到的，在此也顺便记录一下，主要的原因出在task.json文件中，我的task.json之前的文件如下所示：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;version&quot;: &quot;2.0.0&quot;,</span><br><span class="line">    &quot;command&quot;: &quot;g++&quot;,</span><br><span class="line">    &quot;args&quot;: [</span><br><span class="line">        &quot;-g&quot;,</span><br><span class="line">        &quot;$&#123;file&#125;&quot;,</span><br><span class="line">        &quot;-o&quot;,</span><br><span class="line">        &quot;$&#123;fileBasenameNoExtension&#125;.exe&quot;</span><br><span class="line">    ],  // 编译命令参数</span><br><span class="line">    &quot;problemMatcher&quot;: &#123;</span><br><span class="line">        &quot;owner&quot;: &quot;cpp&quot;,</span><br><span class="line">        &quot;fileLocation&quot;: [&quot;relative&quot;, &quot;$&#123;workspaceRoot&#125;&quot;],</span><br><span class="line">        &quot;pattern&quot;: &#123;</span><br><span class="line">            &quot;regexp&quot;: &quot;^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$&quot;,</span><br><span class="line">            &quot;file&quot;: 1,</span><br><span class="line">            &quot;line&quot;: 2,</span><br><span class="line">            &quot;column&quot;: 3,</span><br><span class="line">            &quot;severity&quot;: 4,</span><br><span class="line">            &quot;message&quot;: 5</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这里大家可能对于task.json 和 lauch.json 以及 setttings.json文件不太明白它们的意思，我会整理一下自己的思路写在后面或者篇幅够的话就另开一篇blog(我先挖坑一下)，先说明json文件只是一种数据交换格式这点要先明确，另外对于vscode软件来说，它本身是不提供代码的编译和调试的功能的，那么我们使用的编译和调试是如何进行的呢？<br>以下都是自己的猜想，以后有时间证实后(或者证实错误)都会补充说明，vscode简单来说就是靠这三个配置文件，根据三个文件的中的参数进行对于编译器的调用，例如我这台机器就是对于g++的调用，然后将g++的编译结果输入到界面上而已，有点前端和后端的意思。</p>
+<hr>
+<p>理解到这，我发现task.json文件中和makefile的文件中有一种莫名的相似感，尤其是对于args参数这里，两个相互印证再加上一直以来一直思考程序是如何被运行的？include的作用到底是什么？在不同的源文件中调用函数编译器是如何知道的？申明和定义的作用分别是什么？前向申明和指针引用的关系？相互包含或者说是内部嵌套自身为什么可以？如果你是编程的新新手，或许看着这些问题没什么联系，或者你也感觉到了这些困扰还没有知道答案，如果你都知道了就没必要看下去了，如果你不知道，我会给出所有问题的答案，严格来说，他们的终极问题都是相似的，我会尽自己所能将这些说的明白，对于更底层的问题我这里技术薄弱可能无法给出更加详细的解答了，可能以后我更加精进之后会再写一些。</p>
+<hr>
+<p>为了说明这些，我尝试从申明和定义概念说起，逐步深入谈一下，不知道这么比如是否恰当，申明网上是说用于向程序表明变量或者函数的类型和名字，全局变量和函数本质上是没有什么区别的，这里为了说明我的观点，变量和函数的申明我比如一个接口，对于接口来说用户只知道最基本的信息，对于函数申明，你只知道返回值，函数名等你可以想一想函数重载的知识就比较明了，对于变量申明，你只知道类型，假如你自己定义的类，如果你出现如下代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">class Complex;//类型的申明</span><br><span class="line">void print(Complex c)&#123;</span><br><span class="line">    cout &lt;&lt; c.rel &lt;&lt; &quot; &quot; &lt;&lt; c.img &lt;&lt; endl;</span><br><span class="line">&#125;</span><br><span class="line">//类型的定义</span><br><span class="line">class Complex&#123;</span><br><span class="line">    private:</span><br><span class="line">        double rel;</span><br><span class="line">        double img;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<p>不出意外的话，使用print函数是会报错的，因为print函数调用Complex类时候，只知道它的类型为Complex而并不知道类中成员变量，你如果这么写：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">class Complex;//类型的申明</span><br><span class="line">void print(Complex c);//函数的申明</span><br><span class="line"></span><br><span class="line">//类型的定义</span><br><span class="line">class Complex&#123;</span><br><span class="line">    private:</span><br><span class="line">        double rel;</span><br><span class="line">        double img;</span><br><span class="line">&#125;;</span><br><span class="line">//函数的定义</span><br><span class="line">void print(Complex c)&#123;</span><br><span class="line">    cout &lt;&lt; c.rel &lt;&lt; &quot; &quot; &lt;&lt; c.img &lt;&lt; endl;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<hr>
+<p>下面是我又抽空继续写，之前写了写了不知道怎么写了</p>
+<p>这样写是没有问题的，总这里可以可以看出编程语言的逻辑性，即无法知晓未知(包括你所在语句的后面的变量，函数，类，结构体等)，如果你强行这么写，编译器一定会给你报个错，比如在结构体中定义自身成员，因为结构体在定义自身的时候还不知道自己是啥样子，所以在编程语言中也是无法突破因果关系的。如果能理解编程中的因果关系，那么对于很多的编译器的约束规则也就能理解了。</p>
+<p>接下来继续谈谈申明和定义，其实将一个“对象”拆分为申明和定义这种行为在C++中体现了很多，正如我将其说成“对象”，因为它很能体现OOP的思想，例如一个模块分为头文件和源文件(将类分为申明和实现),这种做法有很多好处，例如，可以将将接口和实现分离从而实现数据保护，以及代码的稳定性等等，正好符合设计模式中的接口隔离原则，以及实现模块的高内聚和松耦合的特点，上面说的是往上层的演化，上升到抽象层面上；如果往下看，从编译器的角度上看，这样的好处也是很明显的，由于松耦合导致模块间的相对独立使得编译器可以相对独立的实现不同模块间的独立编译，可以看看C++ plus中前面对于程序编译和链接的过程和这里正好对应，这样做有一个很明显的好处，就编译环节来说，如果项目特别大的时候，你正好又修改了其中的一小部分，这样只需要独立编译涉及到修改的模块的编译而不需要将所有的源文件都编译一遍从而节省很多时间。其实再想一想，如果底层都是独立的，那么上层的逻辑关系应该也是泾渭分明的，因为你面对的无论是往上谈对象思想，到下面的具体实现以及如何编译都是面对的都是同一个东西，只是你看的角度不同而已，而其中的特点应该是贯穿所有。另外再多说一句，这种思想其实不仅仅是在编程中，而是人类在长久以来解决问题中流淌于血脉中，分治思想!而接口和实现就是这种思想的一种具体措施。所以无论是编译过程中还是上层思想，这种统一应该更加不足为奇了。</p>
+<p>上面口齿不清乱七八糟的谈了很多自己的拙见，还是得落地技术谈一谈具体实例，我的水平肯定是说不了很深，在此推荐一本书《程序员的自我修养》，其中很详细的谈了程序生前和往生，我就最上面的报错简单说明一下我的解决办法，按照网上的教程是无法实现调用自己写的源文件，这点因为你的源文件没有编译!!”${file}”就是当前你编译的main函数所在的文件，vscode只是将这个文件的名称传入编译器，但是其他的文件没有编译，所以就算你的语法没有问题，但是又如何实现呢？有人说不是include了么？这点我继续说明一下，include的只是头文件，所以你的主文件确确实实是是包含了的，标准库的源文件由于编译器本身就有，所以只要你include了，编译器后面可以自动的链接上去，但是对于你存在编译器中的，就需要你自行添加上去，所以说include的作用确实如名称一样，只是将头文件include进去了，我想如果你将其他的源文件include进去应该也是可以的。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#include &quot;xxx.cpp&quot;//include的作用正如include一样而已</span><br></pre></td></tr></table></figure></p>
+<p>但是这种情况就相当于你将其他的源文件写到一个程序中，也就达不到模块的松耦合的特点了，记住本来不同模块之间就是相对独立的，所以你将所有的需要的源文件都要写入json文件中本来就是应该的，最终编译器自动的将其链接起来而已。所以解决办法就是将你需要的源文件名称都要写进去，但是此时可能会有很多个源文件，都写进去太麻烦了，我自己突发奇想，想到了正则匹配的“*”，所以只需要将你需要的放到一个文件夹中，如下所示：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;version&quot;: &quot;2.0.0&quot;,</span><br><span class="line">    &quot;command&quot;: &quot;g++&quot;,</span><br><span class="line">    &quot;args&quot;: [</span><br><span class="line">        &quot;-g&quot;,</span><br><span class="line">        //&quot;$&#123;file&#125;&quot;,</span><br><span class="line">        &quot;*.cpp&quot;,//这样就解决啦</span><br><span class="line">        &quot;-o&quot;,</span><br><span class="line">        &quot;$&#123;fileBasenameNoExtension&#125;.exe&quot;</span><br><span class="line">    ],  // 编译命令参数</span><br><span class="line">    &quot;problemMatcher&quot;: &#123;</span><br><span class="line">        &quot;owner&quot;: &quot;cpp&quot;,</span><br><span class="line">        &quot;fileLocation&quot;: [&quot;relative&quot;, &quot;$&#123;workspaceRoot&#125;&quot;],</span><br><span class="line">        &quot;pattern&quot;: &#123;</span><br><span class="line">            &quot;regexp&quot;: &quot;^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$&quot;,</span><br><span class="line">            &quot;file&quot;: 1,</span><br><span class="line">            &quot;line&quot;: 2,</span><br><span class="line">            &quot;column&quot;: 3,</span><br><span class="line">            &quot;severity&quot;: 4,</span><br><span class="line">            &quot;message&quot;: 5</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>为我的机智点个赞，哈哈。</p>
+<p>学习c++的实际时间不长才几个月，所以有些观点难免有问题，希望大家多多指正，相互学习进步</p>
+<hr>
+<p>学习这个markdown的语法<br><a href="https://blog.csdn.net/xinyu1026/article/details/78703449" target="_blank" rel="noopener">zheli</a></p>
+<blockquote>
+<p><a href="https://blog.csdn.net/xinyu1026/article/details/78703449" target="_blank" rel="noopener">https://blog.csdn.net/xinyu1026/article/details/78703449</a></p>
+</blockquote>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/02/string/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="YuZhengshun">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yu's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/08/02/string/" itemprop="url">Untitled</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-08-02T00:14:57+08:00">
+                2019-08-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="字符串的隐性转换"><a href="#字符串的隐性转换" class="headerlink" title="字符串的隐性转换"></a>字符串的隐性转换</h2><p>在看博客时，突然发现以下程序，并尝试自己运行之后发现了一个自己感觉有趣的现象，直接放代码<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">string a=&quot;abc&quot;;</span><br><span class="line">for(int i = 0;i &lt; 3;i++)</span><br><span class="line">    cout &lt;&lt; &amp;a[i] &lt;&lt; &quot; &quot;;</span><br></pre></td></tr></table></figure></p>
+<p>运行程序之后，发现输出的结果是：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">abc bc c</span><br></pre></td></tr></table></figure></p>
+<p>初次看到这里感觉有点小懵，明明是输入的是地址，为啥输出的是值呢？<br>仔细分析之后个人得出结论，发生了从char*类型向</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/07/20/sudo/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -697,7 +1093,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-count">6</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
