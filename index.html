@@ -229,6 +229,126 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/24/kmp算法/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="YuZhengshun">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yu's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/09/24/kmp算法/" itemprop="url">kmp算法</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-09-24T19:46:47+08:00">
+                2019-09-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="KMP算法的C-实现-附代码解析"><a href="#KMP算法的C-实现-附代码解析" class="headerlink" title="KMP算法的C++实现(附代码解析)"></a>KMP算法的C++实现(附代码解析)</h2><p>前段时间学习kmp算法的时候，根据算法原理使用C++自己实现了一遍，代码如下所示<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;iostream&gt;</span><br><span class="line">#include &lt;vector&gt;</span><br><span class="line">#include &lt;string&gt;</span><br><span class="line">using namespace std;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">//使用dp的思想,这里</span><br><span class="line">vector&lt;int&gt; match(vector&lt;int&gt;&amp; string)&#123;</span><br><span class="line">    int size = string.size();</span><br><span class="line">    vector&lt;int&gt; res(size,-1);</span><br><span class="line">    for(int i = 1;i &lt; size;i++)&#123;</span><br><span class="line">        // if(string[res[i-1]+1] == string[i]) res[i] = res[i-1]+1;</span><br><span class="line">        int index = res[i-1];</span><br><span class="line">        while(index &gt; 0 &amp;&amp; string[index+1] != string[i]) index = res[index];</span><br><span class="line">        if(string[index+1] == string[i]) res[i] = index + 1;</span><br><span class="line">        else res[i] = -1;</span><br><span class="line">    &#125;</span><br><span class="line">    return res;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">vector&lt;int&gt; KMPfuc(vector&lt;int&gt;&amp; par,vector&lt;int&gt;&amp; string)&#123;</span><br><span class="line">    int len = par.size();</span><br><span class="line">    int size = string.size();</span><br><span class="line">    int index = 0;</span><br><span class="line">    int i = 0;</span><br><span class="line">    vector&lt;int&gt; kmp = match(string);//变量和函数名之间会存在覆盖关系</span><br><span class="line">    vector&lt;int&gt; res;</span><br><span class="line">    while(i &lt; len)&#123;</span><br><span class="line">        if(index == size)&#123;//表示已经匹配到串</span><br><span class="line">            res.push_back(i-size);</span><br><span class="line">            //index = 0;//一开始以为从这里重新开始，后来写博客的时候发现不对</span><br><span class="line">            //i++;</span><br><span class="line">            index = kmp[index-1] + 1;//这样应该才是正确的</span><br><span class="line">        &#125;</span><br><span class="line">        //这里不能使用else if</span><br><span class="line">        if(string[index] == par[i])&#123;</span><br><span class="line">            index++;</span><br><span class="line">            i++;</span><br><span class="line">        &#125;</span><br><span class="line">        else if(index &gt; 0)&#123;</span><br><span class="line">            index = kmp[index-1] + 1;</span><br><span class="line">        &#125;</span><br><span class="line">        else &#123;</span><br><span class="line">            i++;//之前的逻辑是有一些问题的</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return res;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int main()&#123;</span><br><span class="line">    vector&lt;int&gt; par = &#123;3,5,3,5,2,6,6,8,9,5,3,7,3,5,3,5,2,4,6&#125;;</span><br><span class="line">    vector&lt;int&gt; string = &#123;3,5,3,5,2&#125;;</span><br><span class="line">    vector&lt;int&gt; res = KMPfuc(par,string);</span><br><span class="line">    cout &lt;&lt; res.size() &lt;&lt; endl;</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/24/shorest-path/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1341,7 +1461,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
